@@ -107,5 +107,3 @@ theorem pel47:
 
       exact sorry
   end
-
-#check pel47_7 (bird_to_animal (existence bird))
