@@ -37,6 +37,9 @@ variable plant_to_edible: plant → edible
 variable eats: animal × edible → Prop
 variable much_smaller: animal × animal → Prop
 
+-- existence
+variable existence : ∀ A : Type, A
+
 -- axioms
 variable pel47_7:
   ∀ (X: animal),
@@ -87,7 +90,22 @@ variable pel47_14a:
   ∃ (Y: plant), eats(snail_to_animal(X),plant_to_edible(Y))
 
 -- conjecture : pel47
+include existence
+include pel47_7 pel47_11a
+include wolf wolf_to_animal caterpillar
+include grain grain_to_plant
 theorem pel47:
 ∃ (X: animal) (Y: animal) (Z: grain),
 (eats(Y,plant_to_edible(grain_to_plant(Z))) ∧ eats(X,animal_to_edible(Y))) :=
-  sorry
+  begin
+    have ex_wolf : wolf, from existence _,
+    cases pel47_7 (wolf_to_animal ex_wolf),
+      have ex_grain : grain, from existence _,
+      have wolf_eats_grain, from h (grain_to_plant ex_grain),
+      have not_wolf_eats_grain, from (pel47_11a ex_wolf ex_grain),
+      contradiction,
+
+      exact sorry
+  end
+
+#check pel47_7 (bird_to_animal (existence bird))
